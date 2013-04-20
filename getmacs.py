@@ -22,11 +22,13 @@ def storeAddys(macaddys, name):
     c = conn.cursor()
     params = (macaddys,)
     c.execute('select * from macaddresses where macaddress = ?', params)
-    params = (macaddys, name)
-    if(c.rowcount == 0):
-        c.execute('update macaddresses set name = ? where macaddress = ', params)
-    else:
+    result = c.fetchone()
+    if(result is None):
+        params = (macaddys, name)
         c.execute('insert into macaddresses values (?, ?)', params)
+    else:
+        params = (name, macaddys)
+        c.execute('update macaddresses set name = ? where macaddress = ?', params)
     conn.commit()
 
 def lookupAddys(macaddys):
@@ -41,7 +43,7 @@ def lookupAddys(macaddys):
             storeAddys(addy, 'UNKNOWN [' + addy + ']')
             param = (addy, 'UNKOWN [' + addy + ']')
         else:
-            param = (addy, result)
+            param = (addy, result[0])
         
         array.append(param)
     
@@ -72,7 +74,7 @@ def main():
     namearray = lookupAddys(macaddys)
 
     for i in namearray:
-        print(i[1][0])
+        print(i[1])
 
 if __name__ == '__main__':
     if(len(sys.argv) == 3):

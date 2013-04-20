@@ -17,16 +17,21 @@ Available functions
 
 ###Initialise Database
 To initialise the databse, do the following
-      bash:~>./getmacs.py init
+
+```bash:~>./getmacs.py init```
 
 ###Add/register MAC address
 To add a MAC address to the DB, do the following
-      bash:~>./getmacs.py <mac_address> <name>
+
+```bash:~>./getmacs.py <mac_address> <name>```
 
 ###Clear Database
 To clear out an existing database (and not remove the database file), do the following
-   bash:~>./getmacs.py clear
+
+```bash:~>./getmacs.py clear```
 
 ###Scan
 To perform a scan and display the devices on the network, do the following
-   bash:~>./getmacs.py
+
+```bash:~>./getmacs.py ```
+

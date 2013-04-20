@@ -5,13 +5,17 @@ import sqlite3
 import re
 import urllib.request
 
-def storeAddys(macaddys):
+def clear():
     conn = sqlite3.connect('macaddresses.db')
     c = conn.cursor()
-    for x in macaddys:
-        t = (x, 'UNKNOWN')
-        c.execute('insert into macaddresses values (?, ?)', t)
-        conn.commit()
+    c.execute('delete from macaddresses')
+    conn.commit()
+
+def init():
+    conn = sqlite3.connect('macaddresses.db')
+    c = conn.cursor()
+    c.execute('create table macaddresses (macaddress text, name text)')
+    conn.commit()
 
 def storeAddys(macaddys, name):
     conn = sqlite3.connect('macaddresses.db')
@@ -31,13 +35,13 @@ def lookupAddys(macaddys):
     array = []
     for addy in macaddys:
         param = (addy, )
-        c.execute('select * from macaddresses where macaddress = ?', param)
-        if(c.rowcount == 0):
-            storeAddys(addy, 'UNKNOWN')
-            param = (addy, 'UNKOWN')
+        c.execute('select name from macaddresses where macaddress = ?', param)
+        result = c.fetchone()
+        if(result is None):
+            storeAddys(addy, 'UNKNOWN [' + addy + ']')
+            param = (addy, 'UNKOWN [' + addy + ']')
         else:
-            for name in c:
-                param = (addy, name[1])
+            param = (addy, result)
         
         array.append(param)
     
@@ -68,10 +72,15 @@ def main():
     namearray = lookupAddys(macaddys)
 
     for i in namearray:
-        print(i[1])
+        print(i[1][0])
 
 if __name__ == '__main__':
     if(len(sys.argv) == 3):
         storeAddys(sys.argv[1], sys.argv[2])
+    elif(len(sys.argv) == 2):
+        if(sys.argv[1] == 'init'):
+            init()
+        elif(sys.argv[1] == 'clear'):
+            clear()
     else:
         main()

@@ -6,6 +6,8 @@ DHCP-Check is a small python project designed to check on who is currently conne
 
 DHCP-Check is written using only python3, and has no additional dependancies.
 
+It also assumes that you have a Netgear router. Currently it is known to work on a DGND3700, and has the username and password hard coded. It should be able to work on any router if you are able to find the url, user and password required for the DHCP status page.
+
 ##Usage
 
 Available functions
